@@ -1,0 +1,72 @@
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/btcsuite/btclog"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/btcsuite/go-flags"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/HcashOrg/hcd"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/HcashOrg/hcwallet"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/dgrijalva/jwt-go"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/go-gorp/gorp"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/go-sql-driver/mysql"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golang/protobuf"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gorilla/context"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/gorilla/sessions"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/haisum/recaptcha"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/jrick/logrotate"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/zenazn/goji"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/net"
+
+[[constraint]]
+  branch = "v1.7.x"
+  name = "google.golang.org/grpc"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/HcashOrg/hcrpcclient"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/HcashOrg/hcutil"
