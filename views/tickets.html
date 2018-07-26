@@ -128,7 +128,7 @@ hcctl {{ if eq .Network "testnet"}}--testnet{{end}} --wallet purchaseticket "def
 			</thead>
 			<tbody>
 			{{ range $i, $data := .TicketsLive }}<tr>
-				<td><a href="https://{{$.ExplorerName}}-explorer.h.cash/explorer/tx/{{$data.Ticket}}" target="_blank">{{$data.Ticket}}</a></td>
+				<td><a href="http://{{$.ExplorerName}}-explorer.h.cash/explorer/tx/{{$data.Ticket}}" target="_blank">{{$data.Ticket}}</a></td>
 				<td>{{ $data.TicketHeight }}</td>
 				</tr>{{end}}
 			</tbody>
@@ -169,8 +169,8 @@ hcctl {{ if eq .Network "testnet"}}--testnet{{end}} --wallet purchaseticket "def
 			</thead>
 			<tbody>
 			{{ range $i, $data := .TicketsVoted }}<tr>
-				<td><a href="https://{{$.ExplorerName}}-explorer.h.cash/explorer/tx/{{$data.Ticket}}" target="_blank">{{$data.Ticket}}</a></td>
-				<td><a href="https://{{$.ExplorerName}}-explorer.h.cash/explorer/tx/{{$data.SpentBy}}" target="_blank">{{$data.SpentByHeight}}</a></td>
+				<td><a href="http://{{$.ExplorerName}}-explorer.h.cash/explorer/tx/{{$data.Ticket}}" target="_blank">{{$data.Ticket}}</a></td>
+				<td><a href="http://{{$.ExplorerName}}-explorer.h.cash/explorer/tx/{{$data.SpentBy}}" target="_blank">{{$data.SpentByHeight}}</a></td>
 				<td>{{$data.TicketHeight}}</td>
 				</tr>{{end}}
 			</tbody>
@@ -215,7 +215,7 @@ hcctl {{ if eq .Network "testnet"}}--testnet{{end}} --wallet purchaseticket "def
 			</thead>
 			<tbody>
 			{{ range $i, $data := .TicketsMissed }}<tr>
-				<td><a href="https://{{$.ExplorerName}}-explorer.h.cash/explorer/tx/{{$data.Ticket}}" target="_blank">{{$data.Ticket}}</a></td>
+				<td><a href="http://{{$.ExplorerName}}-explorer.h.cash/explorer/tx/{{$data.Ticket}}" target="_blank">{{$data.Ticket}}</a></td>
 				<td>{{$data.SpentByHeight}}</td>
 				<td>{{$data.TicketHeight}}</td>
 				</tr>{{end}}

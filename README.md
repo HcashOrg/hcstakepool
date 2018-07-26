@@ -12,7 +12,7 @@ vote on their behalf when the ticket is selected.
 
 ## Architecture
 
-![Stake Pool Architecture](https://i.imgur.com/2JDA9dl.png)
+![Stake Pool Architecture](https://raw.githubusercontent.com/HcashOrg/hcstakepool/master/public/images/HC-Cold wallet.jpg)
 
 - It is highly recommended to use 3 hcd+hcwallet+stakepoold nodes for
   production use on mainnet.
