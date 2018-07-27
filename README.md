@@ -6,8 +6,8 @@
 
 hcstakepool is a web application which coordinates generating 1-of-2 multisig
 addresses on a pool of [hcwallet](https://github.com/HcashOrg/hcwallet) servers
-so users can purchase [proof-of-stake tickets](http://wiki.h.cash/mining/proof-of-stake/)
-on the [Hc](https://h.cash/) network and have the pool of wallet servers
+so users can purchase [proof-of-stake tickets](https://wiki.h.cash/mining/proof-of-stake/)
+on the [HC](https://h.cash/) network and have the pool of wallet servers
 vote on their behalf when the ticket is selected.
 
 ## Architecture
@@ -66,7 +66,7 @@ database and reload its config.
 - General markup improvements.
   - Removed mention of creating a voting account as it has been deprecated.
   - Instructions were further clarified and updated to strongly recommend the
-    use of HcGUI/Paymetheus.
+    use of hcGUI/Paymetheus.
   - Fragments of invalid markup were fixed.
 
 ## 1.1.1 Upgrade Guide
