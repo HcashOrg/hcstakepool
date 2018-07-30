@@ -32,7 +32,7 @@ type params struct {
 var mainNetParams = params{
 	Params:                  &chaincfg.MainNetParams,
 	StakepooldRPCServerPort: "9113",
-	WalletRPCServerPort:     "9110",
+	WalletRPCServerPort:     "14010",
 }
 
 // testNet2Params contains parameters specific to the test network (version 0)
@@ -50,7 +50,7 @@ var testNet2Params = params{
 var simNetParams = params{
 	Params:                  &chaincfg.SimNetParams,
 	StakepooldRPCServerPort: "19560",
-	WalletRPCServerPort:     "19557",
+	WalletRPCServerPort:     "13010",
 }
 
 // netName returns the name used when referring to a hcnetwork.  At the
