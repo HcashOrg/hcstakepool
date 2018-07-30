@@ -47,10 +47,10 @@ const (
 )
 
 var (
-	hxstakepoolHomeDir = hcutil.AppDataDir("hcstakepool", false)
-	defaultConfigFile  = filepath.Join(hxstakepoolHomeDir, defaultConfigFilename)
-	defaultDataDir     = filepath.Join(hxstakepoolHomeDir, defaultDataDirname)
-	defaultLogDir      = filepath.Join(hxstakepoolHomeDir, defaultLogDirname)
+	hcstakepoolHomeDir = hcutil.AppDataDir("hcstakepool", false)
+	defaultConfigFile  = filepath.Join(hcstakepoolHomeDir, defaultConfigFilename)
+	defaultDataDir     = filepath.Join(hcstakepoolHomeDir, defaultDataDirname)
+	defaultLogDir      = filepath.Join(hcstakepoolHomeDir, defaultLogDirname)
 )
 
 // runServiceCommand is only set to a real function on Windows.  It is used
@@ -122,7 +122,7 @@ type serviceOptions struct {
 func cleanAndExpandPath(path string) string {
 	// Expand initial ~ to OS specific home directory.
 	if strings.HasPrefix(path, "~") {
-		homeDir := filepath.Dir(hxstakepoolHomeDir)
+		homeDir := filepath.Dir(hcstakepoolHomeDir)
 		path = strings.Replace(path, "~", homeDir, 1)
 	}
 
@@ -375,7 +375,7 @@ func loadConfig() (*config, []string, error) {
 
 	// Create the home directory if it doesn't already exist.
 	funcName := "loadConfig"
-	err = os.MkdirAll(hxstakepoolHomeDir, 0700)
+	err = os.MkdirAll(hcstakepoolHomeDir, 0700)
 	if err != nil {
 		// Show a nicer error message if it's because a symlink is
 		// linked to a directory that does not exist (probably because
@@ -578,7 +578,7 @@ func loadConfig() (*config, []string, error) {
 
 	for idx := range cfg.WalletCerts {
 		if !fileExists(cfg.WalletCerts[idx]) {
-			path := filepath.Join(hxstakepoolHomeDir, cfg.WalletCerts[idx])
+			path := filepath.Join(hcstakepoolHomeDir, cfg.WalletCerts[idx])
 			if !fileExists(path) {
 				str := "%s: walletcert " + cfg.WalletCerts[idx] + " and " +
 					path + " don't exist"
@@ -631,7 +631,7 @@ func loadConfig() (*config, []string, error) {
 
 		for idx := range cfg.StakepooldCerts {
 			if !fileExists(cfg.StakepooldCerts[idx]) {
-				path := filepath.Join(hxstakepoolHomeDir,
+				path := filepath.Join(hcstakepoolHomeDir,
 					cfg.StakepooldCerts[idx])
 				if !fileExists(path) {
 					str := "%s: stakepooldcert " +
