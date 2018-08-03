@@ -1896,7 +1896,7 @@ func (controller *MainController) SignUpPost(c web.C, r *http.Request) (string, 
 		r.FormValue("password"), r.FormValue("passwordrepeat"), r.FormValue("verifyKey"), r.FormValue("verifyValue")
 
 	if !base64Captcha.VerifyCaptcha(verifyKey,verifyValue) {
-		session.AddFlash("verifyValue is invalid", "signupError")
+		session.AddFlash("verify value is invalid", "signupError")
 		return controller.SignUp(c, r)
 	}
 
