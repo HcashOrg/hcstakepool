@@ -44,8 +44,10 @@
    
    <div class="form-group" style="{{if .FlashSuccess}}display: none;{{end}}">
         <label class="control-label" for="verifyValue">Verification Code:</label>
-        <input name="verifyValue" type="VerifyValue" class="form-control" autocomplete="off" placeholder="Verification Code" required>
-        <image id="VerifyKeyImage" onclick="refreshVerifyCode" ></image>
+		<div class="verifyBox clearfix">
+			<input name="verifyValue" type="VerifyValue" class="form-control" autocomplete="off" placeholder="Verification Code" required>
+			<div class="img"><img id="VerifyKeyImage" onclick="refreshVerifyCode" /></div>
+		</div>
     </div>
   
 	<div class="form-group">
