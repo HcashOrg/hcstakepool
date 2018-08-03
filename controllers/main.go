@@ -1449,15 +1449,11 @@ func (controller *MainController) PasswordResetPost(c web.C, r *http.Request) (s
 	session := controller.GetSession(c)
 	dbMap := controller.GetDbMap(c)
 
-	re := recaptcha.R{
-		Secret: controller.recaptchaSecret,
-	}
+	verifyKey, verifyValue := r.FormValue("verifyKey"), r.FormValue("verifyValue")
 
-	isValid := re.Verify(*r)
-	if !isValid {
-		log.Errorf("Recaptcha error %v", re.LastError())
-		session.AddFlash("Recaptcha error", "passwordresetError")
-		return controller.PasswordReset(c, r)
+	if !base64Captcha.VerifyCaptcha(verifyKey,verifyValue) {
+		session.AddFlash("verify value is invalid", "signupError")
+		return controller.SignUp(c, r)
 	}
 
 	remoteIP := getClientIP(r, controller.realIPHeader)
@@ -1681,16 +1677,13 @@ func (controller *MainController) SettingsPost(c web.C, r *http.Request) (string
 		newEmail := r.FormValue("email")
 		log.Infof("user requested email change from %v to %v", user.Email, newEmail)
 
-		re := recaptcha.R{
-			Secret: controller.recaptchaSecret,
+		verifyKey, verifyValue := r.FormValue("verifyKey"), r.FormValue("verifyValue")
+
+		if !base64Captcha.VerifyCaptcha(verifyKey,verifyValue) {
+			session.AddFlash("verify value is invalid", "signupError")
+			return controller.SignUp(c, r)
 		}
 
-		isValid := re.Verify(*r)
-		if !isValid {
-			session.AddFlash("Recaptcha error", "settingsError")
-			log.Errorf("Recaptcha error %v", re.LastError())
-			return controller.Settings(c, r)
-		}
 
 		userExists := models.GetUserByEmail(dbMap, newEmail)
 
