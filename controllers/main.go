@@ -27,7 +27,6 @@ import (
 	"github.com/HcashOrg/hcstakepool/system"
 	"github.com/HcashOrg/hcwallet/wallet/udb"
 	"github.com/go-gorp/gorp"
-	"github.com/haisum/recaptcha"
 	"github.com/mojocn/base64Captcha"
 	"github.com/zenazn/goji/web"
 
