@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'JuraRegular';
+    src: url('fonts/JuraRegular.eot');
+    src: url('fonts/JuraRegular.eot') format('embedded-opentype'),
+         url('fonts/JuraRegular.woff2') format('woff2'),
+         url('fonts/JuraRegular.woff') format('woff'),
+         url('fonts/JuraRegular.ttf') format('truetype'),
+         url('fonts/JuraRegular.svg#JuraRegular') format('svg');
+}

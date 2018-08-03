@@ -22,7 +22,7 @@ import (
 	xcontext "golang.org/x/net/context"
 
 	"github.com/HcashOrg/hcstakepool/backend/stakepoold/rpc/rpcserver"
-	"github.com/HcashOrg/hcutil"
+	"github.com/HcashOrg/hcd/hcutil"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

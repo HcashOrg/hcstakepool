@@ -18,7 +18,7 @@
     <script src="assets/js/d3pie.min.js"></script>
 
     <script>
-var pie = new d3pie("test1", {
+var pie1 = new d3pie("test1", {
 	"size": {
 		"canvasWidth": 400,
 		"canvasHeight": 400,
@@ -86,7 +86,7 @@ var pie = new d3pie("test1", {
 		}
 	},
 });
-var pie = new d3pie("test2", {
+var pie2 = new d3pie("test2", {
 	"size": {
 		"canvasWidth": 400,
 		"canvasHeight": 400,
@@ -152,7 +152,7 @@ var pie = new d3pie("test2", {
 		}
 	},
 });
-var pie = new d3pie("test3", {
+var pie3 = new d3pie("test3", {
 	"size": {
 		"canvasWidth": 400,
 		"canvasHeight": 400,
@@ -218,6 +218,34 @@ var pie = new d3pie("test3", {
 			"padding": 10
 		}
 	}
+});
+
+var pieTime = null;
+$(window).resize(function(){
+	clearTimeout(pieTime);
+	pieTime = setTimeout(function(){
+		if($(window).width() <= 475){
+			pie1.updateProp("size.canvasWidth", 200);
+			pie2.updateProp("size.canvasWidth", 200);
+			pie3.updateProp("size.canvasWidth", 200);
+			setTimeout(function(){
+				pie1.updateProp("size.canvasHeight", 200);
+				pie2.updateProp("size.canvasHeight", 200);
+				pie3.updateProp("size.canvasHeight", 200);
+			}, 20);
+        }
+        else {
+			pie1.updateProp("size.canvasWidth", 350);
+			pie2.updateProp("size.canvasWidth", 350);
+			pie3.updateProp("size.canvasWidth", 350);
+			setTimeout(function(){
+				pie1.updateProp("size.canvasHeight", 350);
+				pie2.updateProp("size.canvasHeight", 350);
+				pie3.updateProp("size.canvasHeight", 350);
+			}, 20);
+		}
+		pieTime = null;
+    }, 500);
 });
 </script>
 {{end}}

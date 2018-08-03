@@ -12,7 +12,7 @@ import (
 
 	"github.com/HcashOrg/hcd/chaincfg/chainhash"
 	"github.com/HcashOrg/hcd/dcrjson"
-	"github.com/HcashOrg/hcutil"
+	"github.com/HcashOrg/hcd/hcutil"
 	"github.com/HcashOrg/hcrpcclient"
 	"github.com/HcashOrg/hcstakepool/models"
 	"github.com/HcashOrg/hcwallet/wallet/udb"

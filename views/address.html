@@ -1,4 +1,4 @@
-{{define "address"}}
+<link rel="stylesheet" href="../../hcash_hcwiki/doc/css/style.css">{{define "address"}}
 <div class="wrapper">
     <div class="row">
   <div class="col-xs-15 col-md-8 col-lg-8 notication-col center-block">
@@ -91,10 +91,8 @@ $ hcctl {{ if eq .Network "testnet"}}--testnet{{end}} --wallet validateaddress {
 
                 <form method="post" class="form-horizontal">
                         <div class="form-group">
-                                <label class="control-label col-sm-3" for="UserPubKeyAddr">Public Key Address: &nbsp;</label>
-				<div class="col-sm-12">
-                                <input id="UserPubKeyAddr" name="UserPubKeyAddr" type="text" placeholder="Enter Address" class="form-control" minlength=40 maxlength=65 required="required" size=60> &nbsp;
-				</div>
+                                <label class="control-label" for="UserPubKeyAddr">Public Key Address: &nbsp;</label>
+                            <input id="UserPubKeyAddr" name="UserPubKeyAddr" type="text" placeholder="Enter Address" class="form-control" minlength=40 maxlength=65 required="required" size=60>
 			</div>
 			<div class="form-group">
                                 <button id="signup" name="signup" class="btn btn-primary">Submit Address</button>

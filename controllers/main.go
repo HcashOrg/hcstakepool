@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"crypto/rand"
+	"crypto/tls"
 	"encoding/hex"
 	"errors"
 	"fmt"
 	"html/template"
-	"crypto/tls"
 	"net"
 	"net/http"
 	"net/smtp"
@@ -18,8 +18,8 @@ import (
 	"github.com/HcashOrg/hcd/chaincfg"
 	"github.com/HcashOrg/hcd/chaincfg/chainhash"
 	"github.com/HcashOrg/hcd/dcrjson"
-	"github.com/HcashOrg/hcutil"
-	"github.com/HcashOrg/hcutil/hdkeychain"
+	"github.com/HcashOrg/hcd/hcutil"
+	"github.com/HcashOrg/hcd/hcutil/hdkeychain"
 	"github.com/HcashOrg/hcstakepool/helpers"
 	"github.com/HcashOrg/hcstakepool/models"
 	"github.com/HcashOrg/hcstakepool/poolapi"
@@ -28,6 +28,7 @@ import (
 	"github.com/HcashOrg/hcwallet/wallet/udb"
 	"github.com/go-gorp/gorp"
 	"github.com/haisum/recaptcha"
+	"github.com/mojocn/base64Captcha"
 	"github.com/zenazn/goji/web"
 
 	"google.golang.org/grpc"
@@ -90,6 +91,14 @@ func randToken() string {
 	rand.Read(b)
 	return fmt.Sprintf("%x", b)
 }
+
+//init session store
+//two way to store vaild img code
+/*func init(){
+
+
+	base64Captcha.SetCustomStore(&customeStore)
+}*/
 
 // Get the client's real IP address using the X-Real-IP header, or if that is
 // empty, http.Request.RemoteAddr. See the sample nginx.conf for using the
@@ -196,13 +205,14 @@ func (controller *MainController) getNetworkName() string {
 	return controller.params.Name
 }
 
-// get explorer Name 
+// get explorer Name
 func (controller *MainController) getExplorerPrefixName() string {
 	if strings.HasPrefix(controller.params.Name, "testnet") {
 		return "testnet"
 	}
 	return "hc"
 }
+
 // API is the main frontend that handles all API requests.
 func (controller *MainController) API(c web.C, r *http.Request) *system.APIResponse {
 	command := c.URLParams["command"]
@@ -221,6 +231,8 @@ func (controller *MainController) API(c web.C, r *http.Request) *system.APIRespo
 			data, code, response, err = controller.APIPurchaseInfo(c, r)
 		case "stats":
 			data, code, response, err = controller.APIStats(c, r)
+		case "generatecaptcha":
+			data, code, response, err = controller.APIGenerateCaptchaHandler(c, r)
 		default:
 			return nil
 		}
@@ -234,6 +246,10 @@ func (controller *MainController) API(c web.C, r *http.Request) *system.APIRespo
 			return nil
 		}
 	}
+	//http.HandleFunc("getCaptcha", generateCaptchaHandler)
+
+	//api for verify captcha
+	//http.HandleFunc("verifyCaptcha", captchaVerifyHandle)
 
 	if err != nil {
 		status = "error"
@@ -379,8 +395,7 @@ func (controller *MainController) APIPurchaseInfo(c web.C,
 }
 
 // APIStats is an API version of the stats page
-func (controller *MainController) APIStats(c web.C,
-	r *http.Request) (*poolapi.Stats, codes.Code, string, error) {
+func (controller *MainController) APIStats(c web.C, r *http.Request) (*poolapi.Stats, codes.Code, string, error) {
 	dbMap := controller.GetDbMap(c)
 	userCount := models.GetUserCount(dbMap)
 	userCountActive := models.GetUserCountActive(dbMap)
@@ -490,19 +505,20 @@ func (controller *MainController) isAdmin(c web.C, r *http.Request) (bool, error
 
 	return true, nil
 }
+
 //return a smtp client
 func Dial(addr string) (*smtp.Client, error) {
-    conn, err := tls.Dial("tcp", addr, nil)
-    if err != nil {
+	conn, err := tls.Dial("tcp", addr, nil)
+	if err != nil {
 		log.Errorf("Dialing Error:", err)
-		return nil,err
-    }
-    //分解主机端口字符串
-    host, _, _ := net.SplitHostPort(addr)
-    return smtp.NewClient(conn, host)
+		return nil, err
+	}
+	//分解主机端口字符串
+	host, _, _ := net.SplitHostPort(addr)
+	return smtp.NewClient(conn, host)
 }
 
-func (controller *MainController) SendMailUsingTLS(emailaddress string , subject string, body string) (err error) {
+func (controller *MainController) SendMailUsingTLS(emailaddress string, subject string, body string) (err error) {
 	hostname := controller.smtpHost
 
 	if strings.Contains(controller.smtpHost, ":") {
@@ -510,7 +526,7 @@ func (controller *MainController) SendMailUsingTLS(emailaddress string , subject
 		hostname = parts[0]
 	}
 
-	auth := smtp.PlainAuth( "", controller.smtpUsername, controller.smtpPassword,hostname)
+	auth := smtp.PlainAuth("", controller.smtpUsername, controller.smtpPassword, hostname)
 
 	//create smtp client
 	c, err := Dial(controller.smtpHost)
@@ -518,9 +534,9 @@ func (controller *MainController) SendMailUsingTLS(emailaddress string , subject
 		log.Errorf("Create smpt client error:", err)
 		return err
 	}
-   defer c.Close()
+	defer c.Close()
 
-   if auth != nil {
+	if auth != nil {
 		if ok, _ := c.Extension("AUTH"); ok {
 			if err = c.Auth(auth); err != nil {
 				return err
@@ -533,7 +549,7 @@ func (controller *MainController) SendMailUsingTLS(emailaddress string , subject
 		"Subject: " + subject + "\r\n" +
 		"\r\n" +
 		body + "\r\n")
-    
+
 	if err = c.Mail(controller.smtpUsername); err != nil {
 		return err
 	}
@@ -558,6 +574,7 @@ func (controller *MainController) SendMailUsingTLS(emailaddress string , subject
 	}
 	return c.Quit()
 }
+
 // StakepooldGetIgnoredLowFeeTickets performs a gRPC GetIgnoredLowFeeTickets
 // request against all stakepoold instances and returns the first result fetched
 // without errors
@@ -684,7 +701,7 @@ func (controller *MainController) FeeAddressForUserID(uid int) (hcutil.Address,
 	if key.GetAlgType() == 4 {
 		addrType = 1
 	}
-	addr, err := key.Address(controller.params,addrType)
+	addr, err := key.Address(controller.params, addrType)
 	if err != nil {
 		return nil, err
 	}
@@ -717,9 +734,9 @@ func (controller *MainController) TicketAddressForUserID(uid int) (hcutil.Addres
 	addrType := uint8(0)
 	if key.GetAlgType() == 4 {
 		addrType = 1
-	} 
+	}
 
-	addr, err := key.Address(controller.params,addrType)
+	addr, err := key.Address(controller.params, addrType)
 	if err != nil {
 		return nil, err
 	}
@@ -860,7 +877,7 @@ func (controller *MainController) Address(c web.C, r *http.Request) (string, int
 	c.Env["IsAddress"] = true
 	c.Env["Network"] = controller.getNetworkName()
 	c.Env["ExplorerName"] = controller.getExplorerPrefixName()
-	
+
 	c.Env["Flash"] = session.Flashes("address")
 	widgets := controller.Parse(t, "address", c.Env)
 
@@ -1842,10 +1859,23 @@ func (controller *MainController) SignUp(c web.C, r *http.Request) (string, int)
 	c.Env["FlashError"] = session.Flashes("signupError")
 	c.Env["FlashSuccess"] = session.Flashes("signupSuccess")
 	c.Env["RecaptchaSiteKey"] = controller.recaptchaSiteKey
+	c.Env["VerifyCode"] = controller.recaptchaSiteKey
 
 	widgets := controller.Parse(t, "auth/signup", c.Env)
 
 	c.Env["Title"] = "HC Stake Pool - Sign Up"
+	config := base64Captcha.ConfigDigit{Height: 60, Width: 240, CaptchaLen: 6}
+
+	captchaId, captcaInterfaceInstance := base64Captcha.GenerateCaptcha("", config)
+	base64blob := base64Captcha.CaptchaWriteToBase64Encoding(captcaInterfaceInstance)
+	session.Values["verifyValue"] = captchaId
+
+	//or you can just write the captcha content to the httpResponseWriter.
+	//before you put the captchaId into the response COOKIE.
+	//captcaInterfaceInstance.WriteTo(w)
+	//body :S= map[string]interface{}{"code": 1, "data": base64blob, "captchaId": captchaId, "msg": "success"}
+
+	c.Env["ImgSrc"] = base64blob
 	c.Env["Content"] = template.HTML(widgets)
 
 	return controller.Parse(t, "main", c.Env), http.StatusOK
@@ -1859,15 +1889,16 @@ func (controller *MainController) SignUpPost(c web.C, r *http.Request) (string, 
 		return "/error?r=/signup", http.StatusSeeOther
 	}
 
-	re := recaptcha.R{
-		Secret: controller.recaptchaSecret,
-	}
-
 	session := controller.GetSession(c)
 	remoteIP := getClientIP(r, controller.realIPHeader)
 
-	email, password, passwordRepeat := r.FormValue("email"),
-		r.FormValue("password"), r.FormValue("passwordrepeat")
+	email, password, passwordRepeat, verifyKey, verifyValue := r.FormValue("email"),
+		r.FormValue("password"), r.FormValue("passwordrepeat"), r.FormValue("verifyKey"), r.FormValue("verifyValue")
+
+	if !base64Captcha.VerifyCaptcha(verifyKey,verifyValue) {
+		session.AddFlash("verifyValue is invalid", "signupError")
+		return controller.SignUp(c, r)
+	}
 
 	if !strings.Contains(email, "@") {
 		session.AddFlash("email address is invalid", "signupError")
@@ -1881,13 +1912,6 @@ func (controller *MainController) SignUpPost(c web.C, r *http.Request) (string, 
 
 	if password != passwordRepeat {
 		session.AddFlash("passwords do not match", "signupError")
-		return controller.SignUp(c, r)
-	}
-
-	isValid := re.Verify(*r)
-	if !isValid {
-		session.AddFlash("Recaptcha error", "signupError")
-		log.Errorf("Recaptcha error %v", re.LastError())
 		return controller.SignUp(c, r)
 	}
 
@@ -2344,4 +2368,60 @@ func stringSliceContains(s []string, e string) bool {
 		}
 	}
 	return false
+}
+
+//ConfigJsonBody json request body.
+type ConfigJsonBody struct {
+	Id              string
+	CaptchaType     string
+	VerifyValue     string
+	ConfigAudio     base64Captcha.ConfigAudio
+	ConfigCharacter base64Captcha.ConfigCharacter
+	ConfigDigit     base64Captcha.ConfigDigit
+}
+
+/*
+// base64Captcha verify http handler
+func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
+
+	//parse request parameters
+	//接收客户端发送来的请求参数
+	decoder := json.NewDecoder(r.Body)
+	var postParameters ConfigJsonBody
+	err := decoder.Decode(&postParameters)
+	if err != nil {
+		log.Error(err)
+	}
+	defer r.Body.Close()
+	//verify the captcha
+	//比较图像验证码
+	verifyResult := base64Captcha.VerifyCaptcha(postParameters.Id, postParameters.VerifyValue)
+
+	//set json response
+	//设置json响应
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	body := map[string]interface{}{"code": "error", "data": "验证失败", "msg": "captcha failed"}
+	if verifyResult {
+		body = map[string]interface{}{"code": "success", "data": "验证通过", "msg": "captcha verified"}
+	}
+	json.NewEncoder(w).Encode(body)
+}
+*/
+
+// base64Captcha create http handler
+func(controller *MainController) APIGenerateCaptchaHandler(c web.C, r *http.Request)  (map[string]string, codes.Code, string, error){
+	//parse request parameters
+
+	config := base64Captcha.ConfigDigit{
+		Height: 60, 
+		Width: 240, 
+		CaptchaLen: 6,
+	}
+
+	captchaId, captcaInterfaceInstance := base64Captcha.GenerateCaptcha("", config)
+	base64blob := base64Captcha.CaptchaWriteToBase64Encoding(captcaInterfaceInstance)
+    result := make(map[string]string)
+	result["CaptchaId"] = captchaId
+	result["ImageBlob"] = base64blob
+	return result, codes.OK, "generate captcha successful", nil
 }

@@ -629,3 +629,223 @@ th {
 .control-label {
     color: #FFFFFF
 }
+
+
+
+/*
+ * by hope
+*/
+
+/*@font-face {
+	font-family: 'TekoSemibold';
+	src: url('../fonts/TekoSemibold/TekoSemibold.eot');
+	src: url('../fonts/TekoSemibold/TekoSemibold.eot') format('embedded-opentype'),
+	url('../fonts/TekoSemibold/TekoSemibold.woff2') format('woff2'),
+	url('../fonts/TekoSemibold/TekoSemibold.woff') format('woff'),
+	url('../fonts/TekoSemibold/TekoSemibold.ttf') format('truetype'),
+	url('../fonts/TekoSemibold/TekoSemibold.svg#TekoSemibold') format('svg');
+}
+@font-face {
+	font-family: 'TekoRegular';
+	src: url('../fonts/TekoRegular/TekoRegular.eot');
+	src: url('../fonts/TekoRegular/TekoRegular.eot') format('embedded-opentype'),
+	url('../fonts/TekoRegular/TekoRegular.woff2') format('woff2'),
+	url('../fonts/TekoRegular/TekoRegular.woff') format('woff'),
+	url('../fonts/TekoRegular/TekoRegular.ttf') format('truetype'),
+	url('../fonts/TekoRegular/TekoRegular.svg#TekoRegular') format('svg');
+}
+@font-face {
+	font-family: 'TekoMedium';
+	src: url('../fonts/TekoMedium/TekoMedium.eot');
+	src: url('../fonts/TekoMedium/TekoMedium.eot') format('embedded-opentype'),
+	url('../fonts/TekoMedium/TekoMedium.woff2') format('woff2'),
+	url('../fonts/TekoMedium/TekoMedium.woff') format('woff'),
+	url('../fonts/TekoMedium/TekoMedium.ttf') format('truetype'),
+	url('../fonts/TekoMedium/TekoMedium.svg#TekoMedium') format('svg');
+}
+@font-face {
+	font-family: 'TekoBold';
+	src: url('../fonts/TekoBold/TekoBold.eot');
+	src: url('../fonts/TekoBold/TekoBold.eot') format('embedded-opentype'),
+	url('../fonts/TekoBold/TekoBold.woff2') format('woff2'),
+	url('../fonts/TekoBold/TekoBold.woff') format('woff'),
+	url('../fonts/TekoBold/TekoBold.ttf') format('truetype'),
+	url('../fonts/TekoBold/TekoBold.svg#TekoBold') format('svg');
+}
+@font-face {
+	font-family: 'JuraSemiBold';
+	src: url('../fonts/JuraSemiBold/JuraSemiBold.eot');
+	src: url('../fonts/JuraSemiBold/JuraSemiBold.eot') format('embedded-opentype'),
+	url('../fonts/JuraSemiBold/JuraSemiBold.woff2') format('woff2'),
+	url('../fonts/JuraSemiBold/JuraSemiBold.woff') format('woff'),
+	url('../fonts/JuraSemiBold/JuraSemiBold.ttf') format('truetype'),
+	url('../fonts/JuraSemiBold/JuraSemiBold.svg#JuraSemiBold') format('svg');
+}*/
+@font-face {
+	font-family: 'JuraRegular';
+	src: url('../fonts/JuraRegular/JuraRegular.eot');
+	src: url('../fonts/JuraRegular/JuraRegular.eot') format('embedded-opentype'),
+	url('../fonts/JuraRegular/JuraRegular.woff2') format('woff2'),
+	url('../fonts/JuraRegular/JuraRegular.woff') format('woff'),
+	url('../fonts/JuraRegular/JuraRegular.ttf') format('truetype'),
+	url('../fonts/JuraRegular/JuraRegular.svg#JuraRegular') format('svg');
+}
+/*@font-face {
+	font-family: 'JuraMedium';
+	src: url('../fonts/JuraMedium/JuraMedium.eot');
+	src: url('../fonts/JuraMedium/JuraMedium.eot') format('embedded-opentype'),
+	url('../fonts/JuraMedium/JuraMedium.woff2') format('woff2'),
+	url('../fonts/JuraMedium/JuraMedium.woff') format('woff'),
+	url('../fonts/JuraMedium/JuraMedium.ttf') format('truetype'),
+	url('../fonts/JuraMedium/JuraMedium.svg#JuraMedium') format('svg');
+}
+@font-face {
+	font-family: 'JuraLight';
+	src: url('../fonts/JuraLight/JuraLight.eot');
+	src: url('../fonts/JuraLight/JuraLight.eot') format('embedded-opentype'),
+	url('../fonts/JuraLight/JuraLight.woff2') format('woff2'),
+	url('../fonts/JuraLight/JuraLight.woff') format('woff'),
+	url('../fonts/JuraLight/JuraLight.ttf') format('truetype'),
+	url('../fonts/JuraLight/JuraLight.svg#JuraLight') format('svg');
+}*/
+@font-face {
+	font-family: 'JuraBold';
+	src: url('../fonts/JuraBold/JuraBold.eot');
+	src: url('../fonts/JuraBold/JuraBold.eot') format('embedded-opentype'),
+	url('../fonts/JuraBold/JuraBold.woff2') format('woff2'),
+	url('../fonts/JuraBold/JuraBold.woff') format('woff'),
+	url('../fonts/JuraBold/JuraBold.ttf') format('truetype'),
+	url('../fonts/JuraBold/JuraBold.svg#JuraBold') format('svg');
+}
+
+body {
+	font-family: JuraRegular;
+	background-color: #22102A;
+}
+.container {
+	background-color: #22102A;
+}
+footer,
+.navbar-default {
+	background: #8839D2;
+}
+.form-control {
+	color: #8839D2;
+	font-weight: normal;
+}
+input:focus,
+.form-control:focus {
+	color: #8839D2;
+	border: none;
+	border-color: transparent;
+}
+input::-webkit-input-placeholder,
+.form-control::-webkit-input-placeholder{
+	color: #7b5b97;
+}
+input::-moz-placeholder,
+.form-control::-moz-placeholder{
+	color: #7b5b97;
+}
+input:-moz-placeholder,
+.form-control:-moz-placeholder{
+	color: #7b5b97;
+}
+input:-ms-input-placeholder,
+.form-control:-ms-input-placeholder{
+	color: #7b5b97;
+}
+
+a {
+	color: #8839d1;
+}
+a:hover {
+	color: #6e33b2;
+}
+footer a {
+	color: #fff;
+}
+footer a:hover {
+	color: #fff;
+}
+
+.btn-primary {
+	background: #8839d1;
+}
+.btn-primary:hover {
+	background: #582587;
+	border-color: transparent;
+}
+
+.form-horizontal .control-label {
+	float: none;
+	display: block;
+	margin-bottom: 10px;
+}
+.sing-in-control {
+	width: 100%;
+}
+.navbar-default .navbar-nav li>a:hover, .navbar-default .navbar-nav li>a:focus, .navbar-default .navbar-nav li>a:active {
+	color: #fff;
+}
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
+	background-color: #582587;
+	color: #fff;
+}
+
+
+.wrapper {
+	padding-bottom: 100px;
+}
+hr {
+	border-top: 1px solid #582587;
+}
+.table>thead>tr>th, .table>thead>tr>td, .table>tbody>tr>th, .table>tbody>tr>td, .table>tfoot>tr>th, .table>tfoot>tr>td {
+	border-top: 1px solid #582587;
+}
+.navbar-default .navbar-text {
+	color: #fff;
+}
+.form-horizontal .control-label {
+	text-align: left !important;
+}
+
+pre {
+	background-color: #fff;
+	border: 1px solid #fff;
+}
+
+.navbar-brand {
+	padding: 10px 0;
+	height: 60px;
+	line-height: 40px;
+	display: block;
+	margin-right: 30px;
+}
+.navbar-brand img {
+	max-width: 100%;
+	max-height: 100%;
+}
+.navbar-default .navbar-nav li>p,
+.navbar-default .navbar-nav li>a {
+	line-height: 40px;
+}
+.navbar-text {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+@media screen and (max-width: 768px){
+	.navbar-brand {
+		height: 46px;
+		line-height: 36px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+	.container-fluid>.navbar-header {
+		margin-left: 0;
+	}
+	.pie-margin {
+		margin-bottom: 0;
+	}
+}

@@ -27,8 +27,8 @@ import (
 	"github.com/HcashOrg/hcd/dcrjson"
 	"github.com/HcashOrg/hcd/wire"
 	"github.com/HcashOrg/hcrpcclient"
-	"github.com/HcashOrg/hcutil"
-	"github.com/HcashOrg/hcutil/hdkeychain"
+	"github.com/HcashOrg/hcd/hcutil"
+	"github.com/HcashOrg/hcd/hcutil/hdkeychain"
 
 	"github.com/HcashOrg/hcstakepool/backend/stakepoold/rpc/rpcserver"
 	"github.com/HcashOrg/hcstakepool/backend/stakepoold/userdata"

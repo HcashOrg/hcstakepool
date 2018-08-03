@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/HcashOrg/hcd/chaincfg/chainhash"
-	"github.com/HcashOrg/hcutil"
+	"github.com/HcashOrg/hcd/hcutil"
 	"github.com/HcashOrg/hcrpcclient"
 	"github.com/HcashOrg/hcstakepool/backend/stakepoold/userdata"
 )

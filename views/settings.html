@@ -34,60 +34,73 @@
 	<h2>Change Email Address</h2>
         <form method="post" class="form-horizontal">
 	 <div class="form-group">
-	  <label class="control-label col-sm-2" for="email">New Email:</label>
-	<div class="col-sm-13">
-	  <input id="email" name="email" placeholder="New Email Address" type="email" class="form-control" required>
-	</div>
+	  <label class="control-label" for="email">New Email:</label>
+         <input id="email" name="email" placeholder="New Email Address" type="email" class="form-control" required>
 	 </div>
 	 <div class="form-group">
-	  <label class="control-label col-sm-2" for="emailpassword">Password:</label>
-	<div class="col-sm-13">
-	  <input id="emailpassword" name="password" placeholder="Password" type="password" class="form-control" required>
-	</div>
-	 </div>
-	<div class="form-group">
-         <div class="g-recaptcha pull-right" style="padding-right: 15px;" data-sitekey="{{.RecaptchaSiteKey}}" data-theme="light"></div>
-	</div>
+	  <label class="control-label" for="emailpassword">Password:</label>
+         <input id="emailpassword" name="password" placeholder="Password" type="password" class="form-control" required>
+   </div>
+   
+   <div class="form-group" style="{{if .FlashSuccess}}display: none;{{end}}">
+        <label class="control-label" for="verifyValue">Verification Code:</label>
+        <input name="verifyValue" type="VerifyValue" class="form-control" autocomplete="off" placeholder="Verification Code" required>
+        <image id="VerifyKeyImage" onclick="refreshVerifyCode" ></image>
+    </div>
+  
 	<div class="form-group">
          <button id="updateEmail" name="updateEmail" value="true" class="btn btn-primary">Change Email Address</button>
 	</div>
-	 <input type="hidden" name="{{.CsrfKey}}" value={{.CsrfToken}}>
+   <input type="hidden" name="{{.CsrfKey}}" value={{.CsrfToken}}>
+   <input type="hidden" id="VerifyKey"  name="verifyKey">
 	</form>
 
 <hr />
-	<h2>Change Password</h2>
+	    <h2>Change Password</h2>
        <form class="form-horizontal" method="post">
-	<div class="form-group">
-          <label for="curpassword" class="control-label col-sm-2">Current<br />Password</label>
-	<div class="col-sm-13">
-          <input id="curpassword" name="password" type="password" placeholder="Current Password" class="form-control" required>
-	</div>
+        <div class="form-group">
+              <label for="curpassword" class="control-label">Current Password</label>
+            <input id="curpassword" name="password" type="password" placeholder="Current Password" class="form-control" required>
         </div>
         <div class="form-group">
-          <label class="control-label col-sm-2" for="newpassword">New<br />Password</label>
-	<div class="col-sm-13">
-          <input id="newpassword" name="newpassword" type="password" placeholder="New Password" class="form-control" required>
-	</div>
-	</div>
-	<div class="form-group">
-          <label class="control-label col-sm-2" for="newpasswordrepeat">Repeat New Password</label>
-	<div class="col-sm-13">
-          <input id="newpasswordrepeat" name="newpasswordrepeat" type="password" placeholder="Repeat New Password" class="form-control" required>
-	</div>
+          <label class="control-label" for="newpassword">New Password</label>
+            <input id="newpassword" name="newpassword" type="password" placeholder="New Password" class="form-control" required>
+        </div>
+        <div class="form-group">
+              <label class="control-label" for="newpasswordrepeat">Repeat New Password</label>
+            <input id="newpasswordrepeat" name="newpasswordrepeat" type="password" placeholder="Repeat New Password" class="form-control" required>
         </div>
         <div class="form-group">
           <label class="control-label" for="updatepassword"></label>
           <button id="updatepassword" name="updatePassword" value="true" class="btn btn-primary">Update Password</button>
         </div>
         <input type="hidden" name="{{.CsrfKey}}" value={{.CsrfToken}}>
-       </form>
-
-
-
-
+   </form>
   </div>
-
  </div>
 </div>
+<script>
+    function refreshVerifyCode (){
+      $.ajax({
+              url: "api/v1/generatecaptcha",
+              data:{},
+              type: "GET",
+              dataType:'json',
+              success:function(result){
+                  $("#VerifyKey").val(result.data.CaptchaId)
+                  $("#VerifyKeyImage").attr("src",result.data.ImageBlob)
+              },
+              error:function(er){
+                console.log(er)
+              }}
+            );
+    }
+    $(document).ready(function(){ 
+      refreshVerifyCode()
+      $("#VerifyKeyImage").click(function(){
+        refreshVerifyCode()
+      });
+  　});  
+  </script>
 {{end}}
 
