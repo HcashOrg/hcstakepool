@@ -183,7 +183,7 @@ func NewMainController(params *chaincfg.Params, adminIPs []string,
 	}
 
 	voteVersion, err := mc.GetVoteVersion()
-	if err != nil || voteVersion == 0 {
+	if err != nil {
 		cErr := fmt.Errorf("Failed to get wallets' Vote Version: %v", err)
 		return nil, cErr
 	}
