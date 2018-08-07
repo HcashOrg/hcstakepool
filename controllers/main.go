@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bytes"
 	"crypto/rand"
 	"crypto/tls"
 	"encoding/hex"
@@ -39,16 +40,21 @@ var (
 	// MaxUsers is the maximum number of users supported by a stake pool.
 	// This is an artificial limit and can be increased by adjusting the
 	// ticket/fee address indexes above 10000.
-	MaxUsers            = 10000
-	signupEmailSubject  = "Stake pool email verification"
-	signupEmailTemplate = "A request for an account for __URL__\r\n" +
-		"was made from __REMOTEIP__ for this email address.\r\n\n" +
-		"If you made this request, follow the link below:\r\n\n" +
-		"__URL__/emailverify?t=__TOKEN__\r\n\n" +
-		"to verify your email address and finalize registration.\r\n\n"
+	MaxUsers           = 10000
+	signupEmailSubject = "Stake pool email verification"
+	/*signupEmailTemplate = "A request for an account for __URL__\r\n" +
+	"was made from __REMOTEIP__ for this email address.\r\n\n" +
+	"If you made this request, follow the link below:\r\n\n" +
+	"__URL__/emailverify?t=__TOKEN__\r\n\n" +
+	"to verify your email address and finalize registration.\r\n\n"*/
+	signupEmailTemplate         = ""
 	StakepooldUpdateKindAll     = "ALL"
 	StakepooldUpdateKindUsers   = "USERS"
 	StakepooldUpdateKindTickets = "TICKETS"
+)
+
+const (
+	MIME = "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
 )
 
 // MainController is the wallet RPC controller type.  Its methods include the
@@ -512,7 +518,7 @@ func Dial(addr string) (*smtp.Client, error) {
 		log.Errorf("Dialing Error:", err)
 		return nil, err
 	}
-	//分解主机端口字符串
+	//split the host port string
 	host, _, _ := net.SplitHostPort(addr)
 	return smtp.NewClient(conn, host)
 }
@@ -546,8 +552,8 @@ func (controller *MainController) SendMailUsingTLS(emailaddress string, subject 
 	msg := []byte("To: " + emailaddress + "\r\n" +
 		"From: " + controller.smtpFrom + "\r\n" +
 		"Subject: " + subject + "\r\n" +
-		"\r\n" +
-		body + "\r\n")
+		MIME +
+		body)
 
 	if err = c.Mail(controller.smtpUsername); err != nil {
 		return err
@@ -1450,7 +1456,7 @@ func (controller *MainController) PasswordResetPost(c web.C, r *http.Request) (s
 
 	verifyKey, verifyValue := r.FormValue("verifyKey"), r.FormValue("verifyValue")
 
-	if !base64Captcha.VerifyCaptcha(verifyKey,verifyValue) {
+	if !base64Captcha.VerifyCaptcha(verifyKey, verifyValue) {
 		session.AddFlash("verify value is invalid", "signupError")
 		return controller.SignUp(c, r)
 	}
@@ -1678,11 +1684,10 @@ func (controller *MainController) SettingsPost(c web.C, r *http.Request) (string
 
 		verifyKey, verifyValue := r.FormValue("verifyKey"), r.FormValue("verifyValue")
 
-		if !base64Captcha.VerifyCaptcha(verifyKey,verifyValue) {
+		if !base64Captcha.VerifyCaptcha(verifyKey, verifyValue) {
 			session.AddFlash("verify value is invalid", "signupError")
 			return controller.SignUp(c, r)
 		}
-
 
 		userExists := models.GetUserByEmail(dbMap, newEmail)
 
@@ -1887,7 +1892,7 @@ func (controller *MainController) SignUpPost(c web.C, r *http.Request) (string, 
 	email, password, passwordRepeat, verifyKey, verifyValue := r.FormValue("email"),
 		r.FormValue("password"), r.FormValue("passwordrepeat"), r.FormValue("verifyKey"), r.FormValue("verifyValue")
 
-	if !base64Captcha.VerifyCaptcha(verifyKey,verifyValue) {
+	if !base64Captcha.VerifyCaptcha(verifyKey, verifyValue) {
 		session.AddFlash("verify value is invalid", "signupError")
 		return controller.SignUp(c, r)
 	}
@@ -1933,13 +1938,23 @@ func (controller *MainController) SignUpPost(c web.C, r *http.Request) (string, 
 		log.Errorf("Error while registering user: %v", err)
 		return controller.SignUp(c, r)
 	}
+	t, err := template.ParseFiles("views/email-template.html")
+	if err != nil {
+		log.Errorf("error parse email-template %v", err)
+	}
+	buffer := new(bytes.Buffer)
+	data := map[string]string{"URL": controller.baseURL + "/emailverify?t=" + token}
+	if err = t.Execute(buffer, data); err != nil {
+		log.Errorf("error execute template %v", err)
+	}
 
+	signupEmailTemplate = buffer.String()
 	body := signupEmailTemplate
-	body = strings.Replace(body, "__URL__", controller.baseURL, -1)
+	/*body = strings.Replace(body, "__URL__", controller.baseURL, -1)
 	body = strings.Replace(body, "__REMOTEIP__", remoteIP, -1)
-	body = strings.Replace(body, "__TOKEN__", token, -1)
+	body = strings.Replace(body, "__TOKEN__", token, -1)*/
 
-	err := controller.SendMailUsingTLS(user.Email, signupEmailSubject, body)
+	err = controller.SendMailUsingTLS(user.Email, signupEmailSubject, body)
 	if err != nil {
 		session.AddFlash("Unable to send signup email", "signupError")
 		log.Errorf("error sending verification email %v", err)
@@ -2401,18 +2416,18 @@ func captchaVerifyHandle(w http.ResponseWriter, r *http.Request) {
 */
 
 // base64Captcha create http handler
-func(controller *MainController) APIGenerateCaptchaHandler(c web.C, r *http.Request)  (map[string]string, codes.Code, string, error){
+func (controller *MainController) APIGenerateCaptchaHandler(c web.C, r *http.Request) (map[string]string, codes.Code, string, error) {
 	//parse request parameters
 
 	config := base64Captcha.ConfigDigit{
-		Height: 60, 
-		Width: 240, 
+		Height:     60,
+		Width:      240,
 		CaptchaLen: 6,
 	}
 
 	captchaId, captcaInterfaceInstance := base64Captcha.GenerateCaptcha("", config)
 	base64blob := base64Captcha.CaptchaWriteToBase64Encoding(captcaInterfaceInstance)
-    result := make(map[string]string)
+	result := make(map[string]string)
 	result["CaptchaId"] = captchaId
 	result["ImageBlob"] = base64blob
 	return result, codes.OK, "generate captcha successful", nil
