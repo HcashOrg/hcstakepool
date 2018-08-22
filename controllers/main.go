@@ -18,7 +18,7 @@ import (
 
 	"github.com/HcashOrg/hcd/chaincfg"
 	"github.com/HcashOrg/hcd/chaincfg/chainhash"
-	"github.com/HcashOrg/hcd/dcrjson"
+	"github.com/HcashOrg/hcd/hcjson"
 	"github.com/HcashOrg/hcd/hcutil"
 	"github.com/HcashOrg/hcd/hcutil/hdkeychain"
 	"github.com/HcashOrg/hcstakepool/helpers"
@@ -853,7 +853,7 @@ func (controller *MainController) RPCIsStopped() bool {
 }
 
 // WalletStatus returns current WalletInfo from all rpcServers.
-func (controller *MainController) WalletStatus() ([]*dcrjson.WalletInfoResult, error) {
+func (controller *MainController) WalletStatus() ([]*hcjson.WalletInfoResult, error) {
 	return controller.rpcServers.WalletStatus()
 }
 
