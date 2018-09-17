@@ -1938,7 +1938,7 @@ func (controller *MainController) SignUpPost(c web.C, r *http.Request) (string, 
 		log.Errorf("Error while registering user: %v", err)
 		return controller.SignUp(c, r)
 	}
-	t, err := template.ParseFiles("views/email-template.html")
+	t, err := template.ParseFiles("/root/gopath/src/github.com/HcashOrg/hcstakepool/views/email-template.html")
 	if err != nil {
 		log.Errorf("error parse email-template %v", err)
 	}
