@@ -24,7 +24,7 @@ import (
 	"github.com/HcashOrg/hcd/blockchain/stake"
 	"github.com/HcashOrg/hcd/chaincfg"
 	"github.com/HcashOrg/hcd/chaincfg/chainhash"
-	"github.com/HcashOrg/hcd/dcrjson"
+	"github.com/HcashOrg/hcd/hcjson"
 	"github.com/HcashOrg/hcd/wire"
 	"github.com/HcashOrg/hcrpcclient"
 	"github.com/HcashOrg/hcd/hcutil"
@@ -886,7 +886,7 @@ func (ctx *appContext) vote(wg *sync.WaitGroup, blockHash *chainhash.Hash, block
 	}()
 
 	// Ask wallet to generate vote result.
-	var res *dcrjson.GenerateVoteResult
+	var res *hcjson.GenerateVoteResult
 	res, w.err = ctx.walletConnection.GenerateVote(blockHash, blockHeight,
 		w.ticket, w.config.VoteBits, ctx.votingConfig.VoteBitsExtended)
 	if w.err != nil || res.Hex == "" {
