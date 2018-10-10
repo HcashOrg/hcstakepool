@@ -235,7 +235,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 			vawr, err := s.ValidateAddress(vam.address)
 			if err != nil && (err != hcrpcclient.ErrClientDisconnect &&
 				err != hcrpcclient.ErrClientShutdown) {
-				log.Infof("validateAddressFn failure on server %v: %v", i, err)
+				log.Warnf("validateAddressFn failure on server %v: %v", i, err)
 				resp.err = err
 				return resp
 			} else if err != nil && (err == hcrpcclient.ErrClientDisconnect ||
@@ -261,7 +261,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 				continue
 			}
 			if vawrs[i].PubKey != vawrs[i+1].PubKey {
-				log.Infof("validateAddressFn nonequiv failure on servers "+
+				log.Warnf("validateAddressFn nonequiv failure on servers "+
 					"%v, %v (%v != %v)", i, i+1, vawrs[i].PubKey, vawrs[i+1].PubKey)
 				resp.err = fmt.Errorf("non equivalent pubkey returned")
 				return resp
@@ -288,7 +288,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 			cmsr, err := s.CreateMultisig(cmsm.required, cmsm.addresses)
 			if err != nil && (err != hcrpcclient.ErrClientDisconnect &&
 				err != hcrpcclient.ErrClientShutdown) {
-				log.Infof("createMultisigFn failure on server %v: %v", i, err)
+				log.Warnf("createMultisigFn failure on server %v: %v", i, err)
 				resp.err = err
 				return resp
 			} else if err != nil && (err == hcrpcclient.ErrClientDisconnect ||
@@ -314,7 +314,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 				continue
 			}
 			if cmsrs[i].RedeemScript != cmsrs[i+1].RedeemScript {
-				log.Infof("createMultisigFn nonequiv failure on servers "+
+				log.Warnf("createMultisigFn nonequiv failure on servers "+
 					"%v, %v (%v != %v)", i, i+1, cmsrs[i].RedeemScript, cmsrs[i+1].RedeemScript)
 				resp.err = fmt.Errorf("non equivalent redeem script returned")
 				return resp
@@ -349,7 +349,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 			notIsNil1 := isErrors[i] != nil
 			notIsNil2 := isErrors[i+1] != nil
 			if notIsNil1 != notIsNil2 {
-				log.Infof("importScriptFn nonequiv failure 1 on servers %v, %v",
+				log.Warnf("importScriptFn nonequiv failure 1 on servers %v, %v",
 					i, i+1)
 				resp.err = fmt.Errorf("non equivalent error returned 1")
 				return resp
@@ -357,7 +357,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 
 			if notIsNil1 && notIsNil2 {
 				if isErrors[i].Error() != isErrors[i+1].Error() {
-					log.Infof("importScriptFn nonequiv failure 2 on  "+
+					log.Warnf("importScriptFn nonequiv failure 2 on  "+
 						"servers %v, %v", i, i+1)
 					resp.err = fmt.Errorf("non equivalent error returned 2")
 					return resp
@@ -382,7 +382,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 			tfar, err := s.TicketsForAddress(tfam.address)
 			if err != nil && (err != hcrpcclient.ErrClientDisconnect &&
 				err != hcrpcclient.ErrClientShutdown) {
-				log.Infof("ticketsForAddressFn failure on server %v: %v", i, err)
+				log.Warnf("ticketsForAddressFn failure on server %v: %v", i, err)
 				resp.err = err
 				return resp
 			} else if err != nil && (err == hcrpcclient.ErrClientDisconnect ||
@@ -420,7 +420,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 			gtor, err := s.GetTxOut(gtom.hash, gtom.idx, true)
 			if err != nil && (err != hcrpcclient.ErrClientDisconnect &&
 				err != hcrpcclient.ErrClientShutdown) {
-				log.Infof("getTxOutFn failure on server %v: %v", i, err)
+				log.Warnf("getTxOutFn failure on server %v: %v", i, err)
 				resp.err = err
 				return resp
 			} else if err != nil && (err == hcrpcclient.ErrClientDisconnect ||
@@ -446,7 +446,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 				continue
 			}
 			if gtors[i].ScriptPubKey.Hex != gtors[i+1].ScriptPubKey.Hex {
-				log.Infof("getTxOutFn nonequiv failure on servers "+
+				log.Warnf("getTxOutFn nonequiv failure on servers "+
 					"%v, %v", i, i+1)
 				resp.err = fmt.Errorf("non equivalent ScriptPubKey returned")
 				return resp
@@ -472,7 +472,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 			gsir, err := s.GetStakeInfo()
 			if err != nil && (err != hcrpcclient.ErrClientDisconnect &&
 				err != hcrpcclient.ErrClientShutdown) {
-				log.Infof("getStakeInfoFn failure on server %v: %v", i, err)
+				log.Warnf("getStakeInfoFn failure on server %v: %v", i, err)
 				resp.err = err
 				return resp
 			} else if err != nil && (err == hcrpcclient.ErrClientDisconnect ||
@@ -528,7 +528,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 			wir, err := s.WalletInfo()
 			if err != nil && (err != hcrpcclient.ErrClientDisconnect &&
 				err != hcrpcclient.ErrClientShutdown) {
-				log.Infof("connectedFn failure on server %v: %v", i, err)
+				log.Warnf("connectedFn failure on server %v: %v", i, err)
 				resp.err = err
 				return resp
 			} else if err != nil && (err == hcrpcclient.ErrClientDisconnect ||
@@ -553,13 +553,13 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 			// Check to make sure we're connected to the daemon.
 			// If we aren't, send a failure.
 			if !wirs[i].DaemonConnected {
-				log.Infof("daemon connectivity failure on svr %v", i)
+				log.Warnf("daemon connectivity failure on svr %v", i)
 				return fmt.Errorf("wallet server %v not connected to daemon", i)
 			}
 
 			// Check to make sure the wallet is unlocked.
 			if !wirs[i].Unlocked {
-				log.Infof("wallet svr %v not unlocked", i)
+				log.Warnf("wallet svr %v not unlocked", i)
 				return fmt.Errorf("wallet server %v locked", i)
 			}
 		}
@@ -578,7 +578,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 			for i, s := range w.servers {
 				spuir, err := s.StakePoolUserInfo(spuim.userAddr)
 				if err != nil {
-					log.Infof("stakePoolUserInfoFn failure on server %v: %v", i, err)
+					log.Warnf("stakePoolUserInfoFn failure on server %v: %v", i, err)
 					resp.err = err
 					continue
 				}
@@ -602,7 +602,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 			spuir, err := s.StakePoolUserInfo(spuim.userAddr)
 			if err != nil && (err != hcrpcclient.ErrClientDisconnect &&
 				err != hcrpcclient.ErrClientShutdown) {
-				log.Infof("stakePoolUserInfoFn failure on server %v: %v", i, err)
+				log.Warnf("stakePoolUserInfoFn failure on server %v: %v", i, err)
 				resp.err = err
 				return resp
 			} else if err != nil && (err == hcrpcclient.ErrClientDisconnect ||
@@ -621,7 +621,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 		}
 
 		if !w.checkForSyncness(spuirs) {
-			log.Infof("StakePoolUserInfo across wallets are not synced.  Attempting to sync now")
+			log.Warnf("StakePoolUserInfo across wallets are not synced.  Attempting to sync now")
 			w.syncTickets(spuirs)
 		}
 
@@ -641,7 +641,7 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 			hash, height, err := s.GetBestBlock()
 			if err != nil && (err != hcrpcclient.ErrClientDisconnect &&
 				err != hcrpcclient.ErrClientShutdown) {
-				log.Infof("getBestBlockFn failure on server %v: %v", i, err)
+				log.Warnf("getBestBlockFn failure on server %v: %v", i, err)
 				resp.err = err
 				return resp
 			} else if err != nil && (err == hcrpcclient.ErrClientDisconnect ||
