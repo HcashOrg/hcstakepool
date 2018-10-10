@@ -498,8 +498,8 @@ func (w *walletSvrManager) executeInSequence(fn functionName, msg interface{}) i
 				continue
 			}
 			if gsirs[i].Live != gsirs[i+1].Live {
-				log.Infof("getStakeInfoFn nonequiv failure on servers "+
-					"%v, %v", i, i+1)
+				log.Warnf("getStakeInfoFn nonequiv failure on servers "+
+					  "%v:%v, %v:%v", i, i+1, gsirs[i].Live, gsirs[i+1].Live)
 				resp.err = fmt.Errorf("non equivalent Live returned")
 				return resp
 			}
