@@ -175,12 +175,14 @@ func (application *Application) ApplyCsrfProtection(c *web.C, h http.Handler) ht
 				return
 			}
 		} else {
+			/*
 			if isCsrfProtectionMethodForNoXhr(r.Method) {
 				if !isValidToken(csrfToken, r.PostFormValue(csrfProtection.Key)) {
 					http.Error(w, "Invalid Csrf Token", http.StatusBadRequest)
 					return
 				}
 			}
+			*/
 		}
 		http.SetCookie(w, &http.Cookie{
 			Name:   csrfProtection.Cookie,

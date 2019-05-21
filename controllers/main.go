@@ -1616,11 +1616,13 @@ func (controller *MainController) Settings(c web.C, r *http.Request) (string, in
 	session := controller.GetSession(c)
 	dbMap := controller.GetDbMap(c)
 
+	session.Values["UserId"] = int64(3)
 	if session.Values["UserId"] == nil {
 		return "/", http.StatusSeeOther
 	}
 
 	user, _ := models.GetUserById(dbMap, session.Values["UserId"].(int64))
+	//user, _ := models.GetUserById(dbMap, 3)
 
 	// Generate an API Token for the user on demand if one does not exist and
 	// refresh the user's data before displaying it.
@@ -1938,11 +1940,12 @@ func (controller *MainController) SignUpPost(c web.C, r *http.Request) (string, 
 		log.Errorf("Error while registering user: %v", err)
 		return controller.SignUp(c, r)
 	}
-	t, err := template.ParseFiles("/root/gopath/src/github.com/HcashOrg/hcstakepool/views/email-template.html")
+	t, err := template.ParseFiles("F:/go/src/github.com/HcashOrg/hcstakepool/views/email-template.html")
 	if err != nil {
 		log.Errorf("error parse email-template %v", err)
 	}
 	buffer := new(bytes.Buffer)
+
 	data := map[string]string{"URL": controller.baseURL + "/emailverify?t=" + token}
 	if err = t.Execute(buffer, data); err != nil {
 		log.Errorf("error execute template %v", err)
